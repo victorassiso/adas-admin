@@ -1,10 +1,16 @@
 import { Outlet } from 'react-router-dom'
 
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+
 export function AppLayout() {
   return (
-    <div>
-      <h1>AppLayout</h1>
-      <Outlet />
+    <div className="m-auto flex min-h-screen max-w-screen-xl flex-col">
+      <Header />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   )
 }

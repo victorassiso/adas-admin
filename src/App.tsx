@@ -14,19 +14,30 @@ export function App() {
 
   const user = authState.user
 
-  function RequireAuth({ children }: { children: ReactNode }) {
+  function RedirectIfNotAuthenticated({ children }: { children: ReactNode }) {
     return user ? children : <Navigate to="/login" />
+  }
+
+  function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
+    return user ? <Navigate to="/" /> : children
   }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <RedirectIfAuthenticated>
+              <Login />
+            </RedirectIfAuthenticated>
+          }
+        />
         <Route
           element={
-            <RequireAuth>
+            <RedirectIfNotAuthenticated>
               <AppLayout />
-            </RequireAuth>
+            </RedirectIfNotAuthenticated>
           }
         >
           <Route path="/" element={<Home />} />
