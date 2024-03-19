@@ -4,10 +4,11 @@ import { ReactNode, useContext } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import { AuthContext } from './contexts/auth'
-import { Catalog } from './pages/catalog'
+import { Animals } from './pages/animals/animals'
 import { Home } from './pages/home'
 import { AppLayout } from './pages/layouts/app'
 import { Login } from './pages/login'
+import { Users } from './pages/users/users'
 
 export function App() {
   const { authState } = useContext(AuthContext)
@@ -41,7 +42,8 @@ export function App() {
           }
         >
           <Route path="/" element={<Home />} />
-          <Route path="/catalogo" element={<Catalog />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/animals" element={<Animals />} />
         </Route>
       </Routes>
     </BrowserRouter>

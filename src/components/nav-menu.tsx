@@ -19,14 +19,16 @@ export function NavMenu() {
           <SheetContent>
             <div className="flex flex-col items-center justify-start gap-2">
               <NavMenuLink to="/">Início</NavMenuLink>
-              <NavMenuLink to="/catalogo">Animais para adoção</NavMenuLink>
+              <NavMenuLink to="/animals">Animais para adoção</NavMenuLink>
+              <NavMenuLink to="/users">Usuários</NavMenuLink>
             </div>
           </SheetContent>
         </Sheet>
       ) : (
         <div className="flex items-center gap-2">
           <NavMenuLink to="/">Início</NavMenuLink>
-          <NavMenuLink to="/catalogo">Animais para adoção</NavMenuLink>
+          <NavMenuLink to="/animals">Animais para adoção</NavMenuLink>
+          <NavMenuLink to="/users">Usuários</NavMenuLink>
         </div>
       )}
     </>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
 import { NavMenu } from './nav-menu'
@@ -21,6 +22,10 @@ export function Header() {
       <div className="flex flex-grow justify-end">
         <NavMenu />
       </div>
+      <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" alt="Foto de perfil" />
+        <AvatarFallback></AvatarFallback>
+      </Avatar>
     </header>
   )
 }
