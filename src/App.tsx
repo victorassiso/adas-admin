@@ -24,7 +24,7 @@ export function App() {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/adas-admin">
       <Routes>
         <Route
           path="/login"
