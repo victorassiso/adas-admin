@@ -3,15 +3,17 @@ import { useEffect, useState } from 'react'
 
 import { db } from '@/../firebase'
 
-import { UsersHeader } from './components/common/users-header'
+import { UsersHeader } from './components/common/header'
+import { UsersTable } from './components/desktop/table'
+import { UsersTableRowProps } from './components/desktop/table-row'
 
 export function Users() {
-  const [data, setData] = useState({})
+  const [data, setData] = useState<UsersTableRowProps[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const list: any = []
+      const list: UsersTableRowProps[] = []
 
       try {
         const querySnapshot = await getDocs(collection(db, 'users'))
@@ -30,11 +32,10 @@ export function Users() {
     fetchData()
   }, [])
 
-  console.log({ users: data })
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       <UsersHeader />
-      <h3>Table</h3>
+      <UsersTable users={data} isLoading={false} />
     </div>
   )
 }

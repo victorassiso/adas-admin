@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -19,6 +20,30 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+interface newUserInputProps {
+  id: string
+  label: string
+  type: string
+}
+
+const newUserInputs: newUserInputProps[] = [
+  {
+    id: 'name',
+    label: 'Nome',
+    type: 'text',
+  },
+  {
+    id: 'email',
+    label: 'E-mail',
+    type: 'email',
+  },
+  {
+    id: 'password',
+    label: 'Senha',
+    type: 'password',
+  },
+]
+
 const newUserFormSchema = z.object({
   name: z.string().min(1, { message: 'Campo obrigatório' }),
   email: z
@@ -34,13 +59,22 @@ const newUserFormSchema = z.object({
 type NewUserForm = z.infer<typeof newUserFormSchema>
 
 export function UsersHeader() {
+  const [openDialog, setOpenDialog] = useState(false)
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<NewUserForm>({
     resolver: zodResolver(newUserFormSchema),
   })
+
+  function handleOpenDialog(open: boolean) {
+    if (!open) {
+      reset()
+    }
+    setOpenDialog(open)
+  }
 
   async function handleCreateNewUser(data: NewUserForm) {
     try {
@@ -55,6 +89,8 @@ export function UsersHeader() {
         .catch((err) => {
           console.log(err)
         })
+
+      handleOpenDialog(false)
     } catch (err) {
       console.log(err)
     }
@@ -64,11 +100,11 @@ export function UsersHeader() {
     <div>
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">Usuários</h2>
-        <Dialog>
+        <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
           <DialogTrigger asChild>
             <Button>Novo Usuário</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className={isSubmitting ? 'cursor-wait' : ''}>
             <form
               onSubmit={handleSubmit(handleCreateNewUser)}
               className="flex flex-col gap-6"
@@ -80,39 +116,43 @@ export function UsersHeader() {
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <Label>Nome</Label>
-                    <span className="text-xs text-destructive">
-                      {errors.name && errors.name.message}
-                    </span>
-                  </div>
-                  <Input type="name" {...register('name')} />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <Label>E-mail</Label>
-                    <span className="text-xs text-destructive">
-                      {errors.email && errors.email.message}
-                    </span>
-                  </div>
-                  <Input type="email" {...register('email')} />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <Label>Senha</Label>
-                    <span className="text-xs text-destructive">
-                      {errors.password && errors.password.message}
-                    </span>
-                  </div>
-                  <Input type="password" {...register('password')} />
-                </div>
+                {newUserInputs.map((item) => {
+                  return (
+                    <div key={item.id} className="flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
+                        <Label className={isSubmitting ? 'cursor-wait' : ''}>
+                          {item.label}
+                        </Label>
+                        <span className="text-xs text-destructive">
+                          {errors[item.id as keyof NewUserForm]?.message}
+                        </span>
+                      </div>
+                      <Input
+                        type={item.id}
+                        {...register(item.id as keyof NewUserForm)}
+                        disabled={isSubmitting}
+                        className="disabled:cursor-wait"
+                      />
+                    </div>
+                  )
+                })}
               </div>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="ghost">Cancelar</Button>
+                  <Button
+                    variant="ghost"
+                    disabled={isSubmitting}
+                    className="disabled:cursor-wait"
+                  >
+                    Cancelar
+                  </Button>
                 </DialogClose>
-                <Button>Criar usuário</Button>
+                <Button
+                  disabled={isSubmitting}
+                  className="disabled:cursor-wait"
+                >
+                  Criar usuário
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
