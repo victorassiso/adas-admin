@@ -37,7 +37,6 @@ export function Login() {
   const navigate = useNavigate()
 
   function handleLogin(data: LoginForm) {
-    console.log('oi')
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         // Signed up

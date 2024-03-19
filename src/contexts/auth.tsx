@@ -13,8 +13,9 @@ interface AuthContextProps {
 export const AuthContext = createContext({} as AuthContextProps)
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+  const user = localStorage.getItem('user')
   const [authState, dispatch] = useReducer(authReducer, {
-    user: JSON.parse(localStorage.getItem('user') || '') || null,
+    user: user ? JSON.parse(user) : null,
   })
 
   useEffect(() => {
