@@ -1,7 +1,23 @@
+import { deleteDoc, doc } from 'firebase/firestore'
+import { Edit, Trash } from 'lucide-react'
+
+import { db } from '@/../firebase'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 
 export interface AnimalsTableRowProps {
-  id?: string
+  id: string
   avatar?: string
   name?: string
   sex?: 'Macho' | 'Fêmea'
@@ -23,9 +39,12 @@ export function AnimalsTableRow({
   protectorName,
   contact,
 }: AnimalsTableRowProps) {
+  async function deleteRecord() {
+    await deleteDoc(doc(db, 'animals', id))
+  }
   return (
-    <TableRow>
-      <TableCell className="font-mono text-xs font-medium">{id}</TableCell>
+    <TableRow className="">
+      {/* <TableCell className="font-mono text-xs font-medium">{id}</TableCell> */}
       <TableCell className="font-medium">
         <img src={avatar} alt="Avatar" className="h-40 w-40 object-cover" />
       </TableCell>
@@ -36,7 +55,38 @@ export function AnimalsTableRow({
       <TableCell className="font-medium">{address}</TableCell>
       <TableCell className="font-medium">{protectorName}</TableCell>
       <TableCell className="font-medium">{contact}</TableCell>
-      <TableCell></TableCell>
+      <TableCell className="">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost">
+            <Edit />
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">
+                <Trash />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Tem certeza que deseja excluir{' '}
+                  <span className="text-2xl text-primary">{name}</span>?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Essa ação não pode ser desfeita. Ela vai excluir o registro do
+                  catálogo de animais para adoção de forma permanente
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={deleteRecord}>
+                  Excluir
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </TableCell>
     </TableRow>
   )
 }

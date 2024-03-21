@@ -12,7 +12,7 @@ export function Footer() {
         <div className="flex w-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground md:flex-row md:gap-8">
           <div className="flex items-center gap-1">
             <Instagram size={16} />
-            <span>ada-saquarema</span>
+            <span>adas-saquarema</span>
           </div>
         </div>
       </div>
