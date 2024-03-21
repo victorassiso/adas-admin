@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { db, storage } from '@/../firebase'
+import noImageIcon from '@/../public/no-image-icon.jpg'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -221,13 +222,7 @@ export function AnimalsHeader() {
               </DialogHeader>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-center">
-                  <img
-                    src={
-                      imagePreview ||
-                      'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
-                    }
-                    alt="Foto de perfil"
-                  />
+                  <img src={imagePreview || noImageIcon} alt="Foto de perfil" />
                 </div>
                 <div className="flex items-center gap-2">
                   <Label

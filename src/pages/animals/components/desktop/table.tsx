@@ -20,18 +20,20 @@ export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
       <Table className="">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-2/12 rounded-tl-md">
+            {/* <TableHead className="w-2/12 rounded-tl-md">
               Identificador
-            </TableHead>
+            </TableHead> */}
             <TableHead className="w-1/12">Avatar</TableHead>
             <TableHead className="w-1/12">Nome</TableHead>
             <TableHead className="w-1/12">Sexo</TableHead>
             <TableHead className="w-1/12">Porte</TableHead>
             <TableHead className="w-1/12">Peso</TableHead>
-            <TableHead className="w-1/12">Endereço</TableHead>
+            <TableHead className="w-2/12">Endereço</TableHead>
             <TableHead className="w-1/12">Protetor</TableHead>
-            <TableHead className="w-3/12">Contato</TableHead>
-            <TableHead className="w-4 rounded-tr-md"></TableHead>
+            <TableHead className="w-2/12">Contato</TableHead>
+            <TableHead className="w-2/12 rounded-tr-md text-center">
+              Ações
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
