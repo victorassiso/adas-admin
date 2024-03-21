@@ -2,6 +2,7 @@ import { TableCell, TableRow } from '@/components/ui/table'
 
 export interface AnimalsTableRowProps {
   id?: string
+  avatar?: string
   name?: string
   sex?: 'Macho' | 'Fêmea'
   size?: 'Grande' | 'Médio' | 'Pequeno'
@@ -13,6 +14,7 @@ export interface AnimalsTableRowProps {
 
 export function AnimalsTableRow({
   id,
+  avatar,
   name,
   sex,
   size,
@@ -24,6 +26,9 @@ export function AnimalsTableRow({
   return (
     <TableRow>
       <TableCell className="font-mono text-xs font-medium">{id}</TableCell>
+      <TableCell className="font-medium">
+        <img src={avatar} alt="Avatar" className="h-40 w-40 object-cover" />
+      </TableCell>
       <TableCell className="font-medium">{name}</TableCell>
       <TableCell className="font-medium">{sex}</TableCell>
       <TableCell className="font-medium">{size}</TableCell>
