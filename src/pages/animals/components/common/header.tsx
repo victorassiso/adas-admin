@@ -215,12 +215,12 @@ export function AnimalsHeader() {
             className={
               isSubmitting
                 ? 'cursor-wait'
-                : 'flex max-h-full pr-0 md:max-h-[80%]'
+                : 'flex max-h-full px-0 md:max-h-[80%]'
             }
           >
             <form
               onSubmit={handleSubmit(handleCreateNewAnimal)}
-              className="flex flex-col gap-6 overflow-y-scroll pr-6 md:max-h-[calc(80%-1.5rem)]"
+              className="flex flex-col gap-6 overflow-y-scroll px-6 md:max-h-[calc(80%-1.5rem)]"
             >
               <DialogHeader>
                 <DialogTitle>Novo animal</DialogTitle>
