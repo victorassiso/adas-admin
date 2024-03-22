@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { db, storage } from '@/../firebase'
-import noImageIcon from '@/../public/no-image-icon.jpg'
+import noImageIcon from '@/assets/no-image-icon.jpg'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -215,7 +215,7 @@ export function AnimalsHeader() {
             className={
               isSubmitting
                 ? 'cursor-wait'
-                : 'flex max-h-screen pr-0 md:max-h-[80%]'
+                : 'flex max-h-full pr-0 md:max-h-[80%]'
             }
           >
             <form
@@ -223,9 +223,9 @@ export function AnimalsHeader() {
               className="flex flex-col gap-6 overflow-y-scroll pr-6 md:max-h-[calc(80%-1.5rem)]"
             >
               <DialogHeader>
-                <DialogTitle>Novo usuário</DialogTitle>
+                <DialogTitle>Novo animal</DialogTitle>
                 <DialogDescription>
-                  Crie uma nova conta de administrador
+                  Cadastre um novo animal para adoção
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-2">
@@ -373,7 +373,7 @@ export function AnimalsHeader() {
                   disabled={isSubmitting}
                   className="disabled:cursor-wait"
                 >
-                  Criar usuário
+                  Cadastrar animal
                 </Button>
               </DialogFooter>
             </form>
