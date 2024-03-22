@@ -21,6 +21,7 @@ export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
         <TableHeader>
           <TableRow>
             {/* <TableHead className="w-2/12 rounded-tl-md">
+            {/* <TableHead className="w-2/12 rounded-tl-md">
               Identificador
             </TableHead> */}
             <TableHead className="w-2/12">Avatar</TableHead>
@@ -28,6 +29,7 @@ export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
             <TableHead className="w-1/12">Sexo</TableHead>
             <TableHead className="w-1/12">Porte</TableHead>
             <TableHead className="w-1/12">Peso</TableHead>
+            <TableHead className="w-2/12">Endereço</TableHead>
             <TableHead className="w-2/12">Endereço</TableHead>
             <TableHead className="w-1/12">Protetor</TableHead>
             <TableHead className="w-2/12">Contato</TableHead>
