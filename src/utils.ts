@@ -13,3 +13,9 @@ export function fileToDataString(file: File) {
     reader.onload = () => resolve(reader.result as string)
   })
 }
+
+export function disableAutoFocusOnOpenDialog(event: Event) {
+  if (window.innerWidth < 768) {
+    event.preventDefault()
+  }
+}
