@@ -73,13 +73,15 @@ const newAnimalFormSchema = z.object({
   }),
   name: z.string().min(1, { message: 'Campo obrigatório' }),
   sex: z.enum(['Macho', 'Fêmea'], { required_error: 'Campo obrigatório' }),
-  size: z.enum(['Grande', 'Médio', 'Pequeno'], {
-    required_error: 'Campo obrigatório',
-  }),
-  weight: z.coerce.number().min(1, { message: 'Campo obrigatório' }),
-  address: z.string().min(1, { message: 'Campo obrigatório' }),
-  protectorName: z.string().min(1, { message: 'Campo obrigatório' }),
-  contact: z.string().min(1, 'Campo obrigatório'),
+  size: z
+    .enum(['Grande', 'Médio', 'Pequeno'], {
+      required_error: 'Campo obrigatório',
+    })
+    .optional(),
+  weight: z.coerce.number().optional(),
+  address: z.string().optional(),
+  protectorName: z.string().optional(),
+  contact: z.string().optional(),
 })
 
 type NewAnimalForm = z.infer<typeof newAnimalFormSchema>
@@ -209,10 +211,16 @@ export function AnimalsHeader() {
           <DialogTrigger asChild>
             <Button>Novo Animal</Button>
           </DialogTrigger>
-          <DialogContent className={isSubmitting ? 'cursor-wait' : ''}>
+          <DialogContent
+            className={
+              isSubmitting
+                ? 'cursor-wait'
+                : 'flex max-h-screen pr-0 md:max-h-[80%]'
+            }
+          >
             <form
               onSubmit={handleSubmit(handleCreateNewAnimal)}
-              className="flex flex-col gap-6"
+              className="flex flex-col gap-6 overflow-y-scroll pr-6 md:max-h-[calc(80%-1.5rem)]"
             >
               <DialogHeader>
                 <DialogTitle>Novo usuário</DialogTitle>
@@ -294,8 +302,8 @@ export function AnimalsHeader() {
                         <div key={item.id} className="flex flex-col gap-2">
                           <div className="flex items-center gap-2">
                             <Label
-                              id={item.id}
                               className={isSubmitting ? 'cursor-wait' : ''}
+                              htmlFor={item.id}
                             >
                               {item.label}
                             </Label>
@@ -330,7 +338,7 @@ export function AnimalsHeader() {
                   <div key={item.id} className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                       <Label
-                        id={item.id}
+                        htmlFor={item.id}
                         className={isSubmitting ? 'cursor-wait' : ''}
                       >
                         {item.label}
@@ -342,6 +350,7 @@ export function AnimalsHeader() {
                       )}
                     </div>
                     <Input
+                      id={item.id}
                       type={item.type}
                       {...register(item.id as keyof NewAnimalForm)}
                       disabled={isSubmitting}
