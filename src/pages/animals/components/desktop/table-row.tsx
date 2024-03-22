@@ -48,7 +48,9 @@ export function AnimalsTableRow({
       <TableCell className="font-medium">
         <img src={avatar} alt="Avatar" className="h-40 w-40 object-cover" />
       </TableCell>
-      <TableCell className="font-medium">{name}</TableCell>
+      <TableCell className="text-2xl font-black tracking-tight text-primary">
+        {name}
+      </TableCell>
       <TableCell className="font-medium">{sex}</TableCell>
       <TableCell className="font-medium">{size}</TableCell>
       <TableCell className="font-medium">{weight}</TableCell>
