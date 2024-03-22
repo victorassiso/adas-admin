@@ -1,4 +1,5 @@
 import { Instagram } from 'lucide-react'
+import { redirect } from 'react-router-dom'
 
 export function Footer() {
   return (
@@ -10,10 +11,15 @@ export function Footer() {
         </div>
 
         <div className="flex w-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground md:flex-row md:gap-8">
-          <div className="flex items-center gap-1">
+          <a
+            className="flex cursor-pointer items-center gap-1"
+            href="http://google.com"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Instagram size={16} />
             <span>adas-saquarema</span>
-          </div>
+          </a>
         </div>
       </div>
 
