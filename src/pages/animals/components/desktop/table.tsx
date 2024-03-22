@@ -16,8 +16,8 @@ interface AnimalsTableProps {
 
 export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
   return (
-    <div className="rounded-md border ">
-      <Table className="">
+    <div className="rounded-md border">
+      <Table className="box-border min-w-[calc(1280px-8rem)] overflow-x-scroll">
         <TableHeader>
           <TableRow>
             {/* <TableHead className="w-2/12 rounded-tl-md">
@@ -30,7 +30,7 @@ export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
             <TableHead className="w-1/12">Peso</TableHead>
             <TableHead className="w-2/12">Endereço</TableHead>
             <TableHead className="w-1/12">Protetor</TableHead>
-            <TableHead className="w-1/12">Contato</TableHead>
+            <TableHead className="w-2/12">Contato</TableHead>
             <TableHead className="w-2/12 rounded-tr-md text-center">
               Ações
             </TableHead>
