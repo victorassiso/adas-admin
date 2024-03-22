@@ -30,7 +30,6 @@ export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
             <TableHead className="w-1/12">Porte</TableHead>
             <TableHead className="w-1/12">Peso</TableHead>
             <TableHead className="w-2/12">Endereço</TableHead>
-            <TableHead className="w-2/12">Endereço</TableHead>
             <TableHead className="w-1/12">Protetor</TableHead>
             <TableHead className="w-2/12">Contato</TableHead>
             <TableHead className="w-2/12 rounded-tr-md text-center">
