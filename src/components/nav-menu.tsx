@@ -10,9 +10,9 @@ export function NavMenu() {
   const isBreakpoint = useMediaQuery(768 - 1)
 
   return (
-    <>
+    <Sheet>
       {isBreakpoint ? (
-        <Sheet>
+        <>
           <SheetTrigger>
             <Menu />
           </SheetTrigger>
@@ -23,7 +23,7 @@ export function NavMenu() {
               <NavMenuLink to="/users">Usuários</NavMenuLink>
             </div>
           </SheetContent>
-        </Sheet>
+        </>
       ) : (
         <div className="flex items-center gap-2">
           <NavMenuLink to="/">Início</NavMenuLink>
@@ -31,6 +31,6 @@ export function NavMenu() {
           <NavMenuLink to="/users">Usuários</NavMenuLink>
         </div>
       )}
-    </>
+    </Sheet>
   )
 }
