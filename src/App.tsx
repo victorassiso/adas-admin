@@ -3,6 +3,7 @@ import './global.css'
 import { ReactNode, useContext } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
+import { AnimalsContextProvider } from './contexts/animals'
 import { AuthContext } from './contexts/auth'
 import { Animals } from './pages/animals/animals'
 import { Home } from './pages/home'
@@ -24,28 +25,30 @@ export function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <RedirectIfAuthenticated>
-              <Login />
-            </RedirectIfAuthenticated>
-          }
-        />
-        <Route
-          element={
-            <RedirectIfNotAuthenticated>
-              <AppLayout />
-            </RedirectIfNotAuthenticated>
-          }
-        >
-          <Route path="/" element={<Home />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/animals" element={<Animals />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <AnimalsContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <RedirectIfAuthenticated>
+                <Login />
+              </RedirectIfAuthenticated>
+            }
+          />
+          <Route
+            element={
+              <RedirectIfNotAuthenticated>
+                <AppLayout />
+              </RedirectIfNotAuthenticated>
+            }
+          >
+            <Route path="/" element={<Home />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/animals" element={<Animals />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AnimalsContextProvider>
   )
 }

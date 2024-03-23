@@ -1,11 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { db, storage } from '@/../firebase'
+import { uploadFile } from '@/api/uploadFile'
 import noImageIcon from '@/assets/no-image-icon.jpg'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useAnimals } from '@/hooks/use-animals'
 import { fileToDataString } from '@/utils'
 
 interface inputProps {
@@ -87,6 +87,7 @@ const newAnimalFormSchema = z.object({
 type NewAnimalForm = z.infer<typeof newAnimalFormSchema>
 
 export function AnimalsHeader() {
+  const { handleCreateAnimal } = useAnimals()
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [openDialog, setOpenDialog] = useState(false)
   const {
@@ -115,7 +116,6 @@ export function AnimalsHeader() {
           setImagePreview(null)
         }
       } else {
-        console.log('null')
         setImagePreview(null)
       }
     }
@@ -130,76 +130,67 @@ export function AnimalsHeader() {
     setOpenDialog(open)
   }
 
-  function uploadFile() {
-    return new Promise<string>((resolve, reject) => {
-      const file = fileList?.[0]
+  // function uploadFile() {
+  //   return new Promise<string>((resolve, reject) => {
+  //     const file = fileList?.[0]
 
-      if (file) {
-        const fileName = new Date().getTime() + file.name
-        const storageRef = ref(storage, fileName)
-        const uploadTask = uploadBytesResumable(storageRef, file)
-        // Register three observers:
-        // 1. 'state_changed' observer, called any time the state changes
-        // 2. Error observer, called on failure
-        // 3. Completion observer, called on successful completion
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Observe state change events such as progress, pause, and resume
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log('Upload is ' + progress + '% done')
-            switch (snapshot.state) {
-              case 'paused':
-                console.log('Upload is paused')
-                break
-              case 'running':
-                console.log('Upload is running')
-                break
-              default:
-                break
-            }
-          },
-          (error) => {
-            console.error(error)
-            reject(error)
-            // Handle unsuccessful uploads
-          },
-          () => {
-            // Handle successful uploads on complete
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              resolve(downloadURL)
-            })
-          },
-        )
-      } else {
-        reject(new Error('File not found!'))
-      }
-    })
-  }
+  //     if (file) {
+  //       const fileName = new Date().getTime() + file.name
+  //       const storageRef = ref(storage, fileName)
+  //       const uploadTask = uploadBytesResumable(storageRef, file)
 
-  async function handleCreateNewAnimal(data: NewAnimalForm) {
+  //       uploadTask.on(
+  //         'state_changed',
+  //         (snapshot) => {
+  //           // Observe state change events such as progress, pause, and resume
+  //           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+  //           const progress =
+  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+  //           console.log('Upload is ' + progress + '% done')
+  //           switch (snapshot.state) {
+  //             case 'paused':
+  //               console.log('Upload is paused')
+  //               break
+  //             case 'running':
+  //               console.log('Upload is running')
+  //               break
+  //             default:
+  //               break
+  //           }
+  //         },
+  //         (error) => {
+  //           console.error(error)
+  //           reject(error)
+  //           // Handle unsuccessful uploads
+  //         },
+  //         () => {
+  //           // Handle successful uploads on complete
+  //           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //             resolve(downloadURL)
+  //           })
+  //         },
+  //       )
+  //     } else {
+  //       reject(new Error('File not found!'))
+  //     }
+  //   })
+  // }
+
+  async function handleFormSubmit(data: NewAnimalForm) {
     try {
-      const avatar = await uploadFile()
-
-      await addDoc(collection(db, 'animals'), {
+      const file = fileList?.[0]
+      if (!file) {
+        toast.error('Erro ao subir imagem no servidor')
+        return
+      }
+      const avatar = await uploadFile(file)
+      await handleCreateAnimal({
+        ...data,
         avatar,
-        name: data.name,
-        sex: data.sex,
-        size: data.size,
-        weight: data.weight,
-        address: data.address,
-        protectorName: data.protectorName,
-        contact: data.contact,
-        timeStamp: serverTimestamp(),
-      }).catch((err) => {
-        console.log(err)
       })
-
       handleOpenDialog(false)
-    } catch (err) {
-      console.log(err)
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -214,12 +205,12 @@ export function AnimalsHeader() {
           <DialogContent
             className={
               isSubmitting
-                ? 'cursor-wait'
+                ? 'flex max-h-full cursor-wait px-0 md:max-h-[80%]'
                 : 'flex max-h-full px-0 md:max-h-[80%]'
             }
           >
             <form
-              onSubmit={handleSubmit(handleCreateNewAnimal)}
+              onSubmit={handleSubmit(handleFormSubmit)}
               className="flex flex-col gap-6 overflow-y-scroll px-6 md:max-h-[calc(80%-1.5rem)]"
             >
               <DialogHeader>

@@ -1,7 +1,5 @@
-import { deleteDoc, doc } from 'firebase/firestore'
 import { Edit, Trash } from 'lucide-react'
 
-import { db } from '@/../firebase'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,7 +12,18 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
+import { useAnimals } from '@/hooks/use-animals'
+
+// import { Form } from '../common/form'
 
 export interface AnimalsTableRowProps {
   id: string
@@ -39,12 +48,9 @@ export function AnimalsTableRow({
   protectorName,
   contact,
 }: AnimalsTableRowProps) {
-  async function deleteRecord() {
-    await deleteDoc(doc(db, 'animals', id))
-  }
+  const { handleDeleteAnimal } = useAnimals()
   return (
-    <TableRow className="">
-      {/* <TableCell className="font-mono text-xs font-medium">{id}</TableCell> */}
+    <TableRow>
       <TableCell className="font-medium">
         <img src={avatar} alt="Avatar" className="h-40 w-40 object-cover" />
       </TableCell>
@@ -59,9 +65,22 @@ export function AnimalsTableRow({
       <TableCell className="font-medium">{contact}</TableCell>
       <TableCell className="">
         <div className="flex items-center gap-2">
-          <Button variant="ghost">
-            <Edit />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost">
+                <Edit />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Editar animal</DialogTitle>
+                <DialogDescription>
+                  Edite as informações do animal cadastrado
+                </DialogDescription>
+              </DialogHeader>
+              {/* <Form /> */}
+            </DialogContent>
+          </Dialog>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">
@@ -81,7 +100,7 @@ export function AnimalsTableRow({
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={deleteRecord}>
+                <AlertDialogAction onClick={() => handleDeleteAnimal(id)}>
                   Excluir
                 </AlertDialogAction>
               </AlertDialogFooter>

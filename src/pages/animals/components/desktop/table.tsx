@@ -20,10 +20,6 @@ export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
       <Table className="box-border min-w-[calc(1280px-8rem)] overflow-x-scroll">
         <TableHeader>
           <TableRow>
-            {/* <TableHead className="w-2/12 rounded-tl-md">
-            {/* <TableHead className="w-2/12 rounded-tl-md">
-              Identificador
-            </TableHead> */}
             <TableHead className="w-2/12">Avatar</TableHead>
             <TableHead className="w-1/12">Nome</TableHead>
             <TableHead className="w-1/12">Sexo</TableHead>
