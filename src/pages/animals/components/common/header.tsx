@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { db, storage } from '@/../firebase'
+import { createNewAnimal } from '@/api/animals/create'
 import noImageIcon from '@/assets/no-image-icon.jpg'
 import { Button } from '@/components/ui/button'
 import {
@@ -130,76 +128,23 @@ export function AnimalsHeader() {
     setOpenDialog(open)
   }
 
-  function uploadFile() {
-    return new Promise<string>((resolve, reject) => {
-      const file = fileList?.[0]
-
-      if (file) {
-        const fileName = new Date().getTime() + file.name
-        const storageRef = ref(storage, fileName)
-        const uploadTask = uploadBytesResumable(storageRef, file)
-        // Register three observers:
-        // 1. 'state_changed' observer, called any time the state changes
-        // 2. Error observer, called on failure
-        // 3. Completion observer, called on successful completion
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Observe state change events such as progress, pause, and resume
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log('Upload is ' + progress + '% done')
-            switch (snapshot.state) {
-              case 'paused':
-                console.log('Upload is paused')
-                break
-              case 'running':
-                console.log('Upload is running')
-                break
-              default:
-                break
-            }
-          },
-          (error) => {
-            console.error(error)
-            reject(error)
-            // Handle unsuccessful uploads
-          },
-          () => {
-            // Handle successful uploads on complete
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              resolve(downloadURL)
-            })
-          },
-        )
-      } else {
-        reject(new Error('File not found!'))
-      }
-    })
-  }
-
   async function handleCreateNewAnimal(data: NewAnimalForm) {
     try {
-      const avatar = await uploadFile()
-
-      await addDoc(collection(db, 'animals'), {
-        avatar,
+      const file = fileList?.[0]
+      const result = await createNewAnimal({
+        avatar: file,
         name: data.name,
         sex: data.sex,
-        size: data.size,
-        weight: data.weight,
-        address: data.address,
-        protectorName: data.protectorName,
-        contact: data.contact,
-        timeStamp: serverTimestamp(),
-      }).catch((err) => {
-        console.log(err)
+        size: data.size || 'Médio',
+        weight: data.weight || 0,
+        address: data.address || '',
+        contact: data.contact || '',
+        protectorName: data.protectorName || '',
       })
-
+      console.log({ result })
       handleOpenDialog(false)
-    } catch (err) {
-      console.log(err)
+    } catch (e) {
+      console.error(e)
     }
   }
 
