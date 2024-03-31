@@ -1,7 +1,6 @@
-import { deleteDoc, doc } from 'firebase/firestore'
 import { Edit, Trash } from 'lucide-react'
 
-import { db } from '@/../firebase'
+import { deleteAnimal } from '@/api/animals/delete'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,8 +38,12 @@ export function AnimalsTableRow({
   protectorName,
   contact,
 }: AnimalsTableRowProps) {
-  async function deleteRecord() {
-    await deleteDoc(doc(db, 'animals', id))
+  async function handleDeleteAnimal() {
+    try {
+      await deleteAnimal(id)
+    } catch (e) {
+      console.error(e)
+    }
   }
   return (
     <TableRow className="">
@@ -81,7 +84,7 @@ export function AnimalsTableRow({
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={deleteRecord}>
+                <AlertDialogAction onClick={handleDeleteAnimal}>
                   Excluir
                 </AlertDialogAction>
               </AlertDialogFooter>
