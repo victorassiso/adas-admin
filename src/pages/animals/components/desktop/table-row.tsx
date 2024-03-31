@@ -1,6 +1,6 @@
 import { Edit, Trash } from 'lucide-react'
+import { useContext } from 'react'
 
-import { deleteAnimal } from '@/api/animals/delete'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,17 +14,18 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
+import { AnimalsContext } from '@/contexts/animals'
 
 export interface AnimalsTableRowProps {
   id: string
-  avatar?: string
-  name?: string
-  sex?: 'Macho' | 'Fêmea'
-  size?: 'Grande' | 'Médio' | 'Pequeno'
-  weight?: number
-  address?: string
-  protectorName?: string
-  contact?: string
+  avatar: string
+  name: string
+  sex: 'Macho' | 'Fêmea'
+  size: 'Grande' | 'Médio' | 'Pequeno'
+  weight: number
+  address: string
+  protectorName: string
+  contact: string
 }
 
 export function AnimalsTableRow({
@@ -38,16 +39,10 @@ export function AnimalsTableRow({
   protectorName,
   contact,
 }: AnimalsTableRowProps) {
-  async function handleDeleteAnimal() {
-    try {
-      await deleteAnimal(id)
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const { handleDeleteAnimal } = useContext(AnimalsContext)
+
   return (
     <TableRow className="">
-      {/* <TableCell className="font-mono text-xs font-medium">{id}</TableCell> */}
       <TableCell className="font-medium">
         <img src={avatar} alt="Avatar" className="h-40 w-40 object-cover" />
       </TableCell>
@@ -84,7 +79,7 @@ export function AnimalsTableRow({
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDeleteAnimal}>
+                <AlertDialogAction onClick={() => handleDeleteAnimal(id)}>
                   Excluir
                 </AlertDialogAction>
               </AlertDialogFooter>

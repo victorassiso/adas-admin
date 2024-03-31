@@ -3,14 +3,15 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '@/../firebase'
 
 import { uploadFile } from '../upload-file'
-import { CreateAnimalProps } from './create'
+import { CreateAnimalRequest } from './create'
 
-export interface UpdateAnimalProps extends Omit<CreateAnimalProps, 'avatar'> {
+export interface UpdateAnimalRequest
+  extends Omit<CreateAnimalRequest, 'avatar'> {
   id: string
   avatar: string | File
 }
 
-export async function updateAnimal(data: UpdateAnimalProps) {
+export async function updateAnimal(data: UpdateAnimalRequest) {
   let avatar: string
 
   if (data.avatar instanceof File) {
@@ -25,4 +26,9 @@ export async function updateAnimal(data: UpdateAnimalProps) {
 
   const { id, ...updateData } = data
   await updateDoc(doc(db, 'animals', id), { ...updateData, avatar })
+
+  return {
+    ...data,
+    avatar,
+  }
 }

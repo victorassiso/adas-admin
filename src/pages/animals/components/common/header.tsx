@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { createNewAnimal } from '@/api/animals/create'
 import noImageIcon from '@/assets/no-image-icon.jpg'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { AnimalsContext } from '@/contexts/animals'
 import { fileToDataString } from '@/utils'
 
 interface inputProps {
@@ -86,6 +86,7 @@ type NewAnimalForm = z.infer<typeof newAnimalFormSchema>
 
 export function AnimalsHeader() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const { handleCreateAnimal } = useContext(AnimalsContext)
   const [openDialog, setOpenDialog] = useState(false)
   const {
     handleSubmit,
@@ -131,7 +132,7 @@ export function AnimalsHeader() {
   async function handleCreateNewAnimal(data: NewAnimalForm) {
     try {
       const file = fileList?.[0]
-      const result = await createNewAnimal({
+      const result = await handleCreateAnimal({
         avatar: file,
         name: data.name,
         sex: data.sex,
@@ -141,7 +142,7 @@ export function AnimalsHeader() {
         contact: data.contact || '',
         protectorName: data.protectorName || '',
       })
-      console.log({ result })
+      console.log(result)
       handleOpenDialog(false)
     } catch (e) {
       console.error(e)

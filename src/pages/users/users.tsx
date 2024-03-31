@@ -12,7 +12,6 @@ export function Users() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const list: UsersTableRowProps[] = []
 
       try {

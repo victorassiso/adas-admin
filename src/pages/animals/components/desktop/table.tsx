@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+
 import {
   Table,
   TableBody,
@@ -5,25 +7,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { AnimalsContext } from '@/contexts/animals'
 
-import { AnimalsTableRow, AnimalsTableRowProps } from './table-row'
+import { AnimalsTableRow } from './table-row'
 import { TableSkeleton } from './table-skeleton'
 
-interface AnimalsTableProps {
-  animals: AnimalsTableRowProps[]
-  isLoading: boolean
-}
-
-export function AnimalsTable({ animals, isLoading }: AnimalsTableProps) {
+export function AnimalsTable() {
+  const {
+    animalsState: { animals },
+    isLoading,
+  } = useContext(AnimalsContext)
   return (
     <div className="rounded-md border">
       <Table className="box-border min-w-[calc(1280px-8rem)] overflow-x-scroll">
         <TableHeader>
           <TableRow>
-            {/* <TableHead className="w-2/12 rounded-tl-md">
-            {/* <TableHead className="w-2/12 rounded-tl-md">
-              Identificador
-            </TableHead> */}
             <TableHead className="w-2/12">Avatar</TableHead>
             <TableHead className="w-1/12">Nome</TableHead>
             <TableHead className="w-1/12">Sexo</TableHead>
