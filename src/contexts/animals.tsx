@@ -69,7 +69,7 @@ export const AnimalsContextProvider = ({
     setIsLoading(false)
 
     dispatch({
-      type: ActionTypes.CREATE,
+      type: ActionTypes.UPDATE,
       payload: {
         data: updatedAnimal,
       },

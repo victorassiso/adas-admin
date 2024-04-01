@@ -1,5 +1,6 @@
 import { Edit, Trash } from 'lucide-react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import {
   AlertDialog,
@@ -13,8 +14,12 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { AnimalsContext } from '@/contexts/animals'
+
+import { AnimalForm } from '../../animals'
+import { UpdateDialog } from '../common/update-dialog'
 
 export interface AnimalsTableRowProps {
   id: string
@@ -40,6 +45,23 @@ export function AnimalsTableRow({
   contact,
 }: AnimalsTableRowProps) {
   const { handleDeleteAnimal } = useContext(AnimalsContext)
+  const [openDialog, setOpenDialog] = useState(false)
+  const { setValue, reset } = useFormContext<AnimalForm>()
+
+  function handleOpenDialog(open: boolean) {
+    if (open) {
+      setValue('name', name)
+      setValue('sex', sex)
+      setValue('size', size)
+      setValue('weight', weight)
+      setValue('address', address)
+      setValue('protectorName', protectorName)
+      setValue('contact', contact)
+    } else {
+      reset()
+    }
+    setOpenDialog(open)
+  }
 
   return (
     <TableRow className="">
@@ -57,9 +79,21 @@ export function AnimalsTableRow({
       <TableCell className="font-medium">{contact}</TableCell>
       <TableCell className="">
         <div className="flex items-center gap-2">
-          <Button variant="ghost">
-            <Edit />
-          </Button>
+          <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
+            <DialogTrigger asChild>
+              <Button variant="ghost">
+                <Edit />
+              </Button>
+            </DialogTrigger>
+            <UpdateDialog
+              id={id}
+              avatar={avatar}
+              sex={sex}
+              size={size}
+              handleOpenDialog={handleOpenDialog}
+            />
+          </Dialog>
+
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">
